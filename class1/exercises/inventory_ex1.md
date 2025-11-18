@@ -1,8 +1,10 @@
 1a. Create an "INI" style inventory file. This file should have an "all:vars" section containing variables for the following:
 
 ```
-ansible_python_interpreter should be set to "/home/your_user/VENV/py3_venv/bin/python"
-ansible_user and ansible_password should be set to 'admin' and the password will be provided
+# Replace 'your_user' with your lab username
+ansible_python_interpreter=/home/your_user/VENV/py3_venv/bin/python
+ansible_user=admin
+ansible_password=invalid
 ```
 
 Additionally, add the following three groups to the inventory file (currently, there are no hosts in these groups):
@@ -57,6 +59,24 @@ $ ansible-inventory --graph -i ./inventory_ex1b.ini
   |  |--lab_fw
 ```
 
-2c. Modify your inventory file to set the "ansible_network_os" for the cisco and arista groups to "ios" and "eos" respectively. Additionally, set the "ansible_host" for each of these hosts to the FQDN of the device (i.e. cisco1.lasthop.io, arista1.lasthop.io, etc.). Use:
+1c. Modify your inventory file to set the "ansible_network_os" for the gaia and checkpoint groups to:
+
+```bash
+ansible_network_os=check_point.gaia.checkpoint
+ansible_network_os=check_point.mgmt.checkpoint
+```
+
+Additionally, set the "ansible_host" for each of these hosts to the FQDN of the device:
+
+```bash
+ansible_host=
+ (i.e. cisco1.lasthop.io, arista1.lasthop.io, etc.). Use:
+
+
+ 26 ansible_connection=httpapi
+ 27 ansible_httpapi_use_ssl=True
+ 28 ansible_httpapi_validate_certs=False
+ 29 ansible_user=admin
+
 $ ansible-inventory --list -i ./inventory.ini 
 From this output, inspect the inventory and validate that the network_os has been set appropriately. Additionally, add "localhost" to be a member of the "local" group (you will need to set "ansible_connection=local" for the localhost entry).
