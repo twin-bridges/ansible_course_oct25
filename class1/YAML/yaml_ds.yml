@@ -1,0 +1,9 @@
+---
+chkpnt_pod1:
+  host: chkpnt-pod1.lasthop.io
+  device_type: checkpoint_gaia
+  username: admin
+  use_keys: true
+  key_file: "/home/kbyers/.ssh/eu-sshkey.pem"
+
+
