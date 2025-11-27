@@ -1,0 +1,31 @@
+---
+- name: Deploy internal network objects
+  hosts: mgmt
+  gather_facts: false
+  vars:
+    network_name: "hq_net_129"
+    network_ip: "172.31.129.0"
+    mask_length: 24
+    
+  tasks:
+    - check_point.mgmt.cp_mgmt_network:
+        name: "{{ item.name }}"
+        subnet: "{{ item.network }}" 
+        mask_length: "{{ item.mask }}" 
+        color: blue
+        state: "present" 
+      loop:
+        - {name: hq_net_128, network: 172.31.128.0, mask: 24}
+        - {name: hq_net_129, network: 172.31.129.0, mask: 24}
+        - {name: hq_net_130, network: 172.31.130.0, mask: 24}
+        - {name: hq_net_131, network: 172.31.131.0, mask: 24}
+        - {name: hq_net_132, network: 172.31.132.0, mask: 24}
+        - {name: hq_net_133, network: 172.31.133.0, mask: 24}
+        - {name: hq_net_134, network: 172.31.134.0, mask: 24}
+        - {name: hq_net_135, network: 172.31.135.0, mask: 24}
+      notify: FW Publish
+   
+  handlers:
+    - name: FW Publish
+      check_point.mgmt.cp_mgmt_publish:
+
