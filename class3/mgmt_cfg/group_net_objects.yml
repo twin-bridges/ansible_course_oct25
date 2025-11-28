@@ -1,0 +1,25 @@
+---
+- name: Deploy internal network objects
+  hosts: mgmt
+  gather_facts: false
+  vars:
+    network_name: "hq_net_129"
+    network_ip: "172.31.129.0"
+    mask_length: 24
+
+- name: Create or Update the Network Object Group
+      check_point.mgmt.cp_mgmt_group:
+        name: "Web_and_DB_Servers"
+        state: present
+        members:
+          - "Host_Web_Server_01"
+          - "Host_DB_Server_02"
+          - "Other_Existing_Object" # You can add objects created manually or by other playbooks
+        auto_publish_session: yes # Publish all pending changes after this task
+      tags: create_group:wq
+
+ 26       notify: FW Publish
+ 27 
+ 28   handlers:
+ 29     - name: FW Publish
+ 30       check_point.mgmt.cp_mgmt_publish:
