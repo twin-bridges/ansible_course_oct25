@@ -1,0 +1,38 @@
+---
+- name: Test mgmt script
+  hosts: mgmt
+  gather_facts: false
+  vars:
+    # command: 'ls -l /'
+    # command: fw stat
+    # command: cphaprob state
+    # command: cpstat os -f memory
+    command: clish -c "show interfaces"
+  tasks:
+
+    - name: Execute command
+      check_point.mgmt.cp_mgmt_run_script:
+        script: "{{ command }}"
+        script_name: 'List files'
+        targets:
+          - "{{ fw_name }}"
+      register: response
+
+    - name: Extract 'run-script' field
+      ansible.builtin.set_fact:
+        run_script_dict: "{{ response['run-script'] }}"
+
+    - name: "Skip over the uid key (only retain the 'value') and extract tasks[0]"
+      ansible.builtin.set_fact:
+        response_tasks : "{{ item.value.tasks[0] }}"
+      loop: "{{ run_script_dict | dict2items }}"
+      loop_control:
+        label: " "
+
+    - name: Extract responseMessage field
+      ansible.builtin.set_fact:
+        response_message: "{{ response_tasks['task-details'][0].responseMessage }}"
+
+    - name: Decode b64 encoded response
+      ansible.builtin.debug:
+        msg: "{{ response_message | b64decode }}"
