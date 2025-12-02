@@ -1,27 +1,27 @@
 ---
 - name: Config DNS servers
   check_point.gaia.cp_gaia_dns:
-    suffix: "{{ dns_domain }}"
-    primary: "{{ dns1 }}"
-    secondary: "{{ dns2 }}"
-    tertiary: "{{ dns3 }}"
+    suffix: "{{ gaia_build_dns_domain }}"
+    primary: "{{ gaia_build_dns1 }}"
+    secondary: "{{ gaia_build_dns2 }}"
+    tertiary: "{{ gaia_build_dns3 }}"
 
 - name: Retrieve current config
   check_point.gaia.cp_gaia_run_script:
     script: clish -c "show configuration"
   changed_when: false
-  register: output
+  register: gaia_build_output
 
 - name: Extract config from output
   ansible.builtin.set_fact:
-    config: "{{ output.run_script.tasks[0]['task-details'][0].output | b64decode }}"
+    gaia_build_config: "{{ gaia_build_output.run_script.tasks[0]['task-details'][0].output | b64decode }}"
 
 - name: Extract domainname config
   ansible.builtin.set_fact:
-    domain_name: "{{ config | regex_search('^set\\s+domainname.*$', multiline=True) }}"
+    gaia_build_domain_name: "{{ gaia_build_config | regex_search('^set\\s+domainname.*$', multiline=True) }}"
 
 - name: Configure domainname
   check_point.gaia.cp_gaia_run_script:
     script: clish -c "set domainname {{ dns_domain }}"
-  when: "'xlasthop.io' not in domain_name"
+  when: "'lasthop.io' not in gaia_build_domain_name"
   notify: Gaia Save Config

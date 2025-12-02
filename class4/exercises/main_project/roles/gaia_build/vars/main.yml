@@ -1,4 +1,4 @@
-dns1: "172.31.0.2"
-dns2: "8.8.8.8"
-dns3: "8.8.4.4"
-dns_domain: lasthop.io
+gaia_build_dns1: "172.31.0.2"
+gaia_build_dns2: "8.8.8.8"
+gaia_build_dns3: "8.8.4.4"
+gaia_build_dns_domain: lasthop.io

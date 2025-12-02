@@ -1,2 +1,4 @@
-- import_tasks: dns.yml
-#- import_tasks: static_routes.yml
+- name: Gaia DNS Tasks
+  ansible.builtin.import_tasks: dns.yml
+# - name: Gaia DNS Tasks
+#   ansible.builtin.import_tasks: static_routes.yml

@@ -4,6 +4,5 @@
   gather_facts: false
   tasks:
     - name: Gaia Tasks (DNS and Routes)
-      import_role:
+      ansible.builtin.import_role:
         name: gaia_build
-
