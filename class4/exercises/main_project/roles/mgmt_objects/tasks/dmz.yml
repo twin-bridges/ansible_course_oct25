@@ -2,6 +2,6 @@
 - name: DMZ Web Server
   check_point.mgmt.cp_mgmt_host:
     name: "{{ mgmt_objects_dmz_web_srv.name }}"
-    ipv4_address: "{{ mgmt_objects_dmz_web_srv.ipv4_addresss }}"
+    ipv4_address: "{{ mgmt_objects_dmz_web_srv.ipv4_address }}"
     color: dark green
   notify: FW Publish

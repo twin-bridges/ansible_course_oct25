@@ -1,0 +1,39 @@
+---
+# Ansible management access needs enabled/allowed in the policy
+# before doing this.
+- name: Add DMZ Web Server Object and FW Policy
+  hosts: mgmt
+  gather_facts: false
+  tasks:
+    - name: Add Corp Web Server
+      check_point.mgmt.cp_mgmt_host:
+        name: Corp Web Server
+        ipv4_address: 172.31.144.220
+        color: dark green
+      notify: Publish
+
+    - name: DMZ Web Server Policy Rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: "Network"
+        name: "Corp Web Server Access"
+        source: Any
+        destination:
+          - Corp Web Server
+        service:
+          - http
+          - https
+        action: "Accept"
+        position: 1
+      notify:
+        - Publish
+        - Install Policy
+
+  handlers:
+    - name: Publish
+      check_point.mgmt.cp_mgmt_publish:
+
+    - name: Install Policy
+      check_point.mgmt.cp_mgmt_install_policy:
+        policy_package: "Standard"
+        targets:
+          - "{{ fw_name }}"
