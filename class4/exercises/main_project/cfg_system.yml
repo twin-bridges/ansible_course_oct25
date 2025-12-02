@@ -8,11 +8,16 @@
         name: gaia_build
   tags: gaia_tasks
 
-- name: Mgmt Tasks (Configure Objects)
+- name: Mgmt Tasks (Objects and Policy)
   hosts: mgmt
   gather_facts: false
   tasks:
     - name: Network Objects
       ansible.builtin.import_role:
         name: mgmt_objects
-  tags: mgmt_tasks
+      tags: fw_objects
+
+    - name: Firewall Policy
+      ansible.builtin.import_role:
+        name: fw_policy
+      tags: fw_policy

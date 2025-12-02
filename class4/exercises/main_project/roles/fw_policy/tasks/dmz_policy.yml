@@ -1,5 +1,5 @@
 ---
-- name: Firewall management rules
+- name: DMZ Web Server Policy Rule
   check_point.mgmt.cp_mgmt_access_rule:
     layer: "Network"
     name: "{{ item.name }}"
@@ -8,7 +8,7 @@
     service: "{{ item.service }}"
     action: "{{ item.action }}"
     position: "{{ item.position }}"
-  loop: "{{ fw_policy_mgmt_rules }}"
+  loop: "{{ fw_policy_dmz_rules }}"
   notify:
     - FW Publish
     - Install Policy

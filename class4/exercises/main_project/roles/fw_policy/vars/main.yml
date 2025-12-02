@@ -1,29 +1,32 @@
-  1 ---
-  2 - name: Firewall management (ansible)
-  3   check_point.mgmt.cp_mgmt_access_rule:
-  4     layer: "Network"
-  5     name: "Ansible Management Access"
-  6     source:
-  7       - Ansible Server
-  8     destination:
-  9       - "{{ fw_name }}"
- 10     service: Any
- 11     action: "Accept"
- 12     position: 1
- 13   notify:
- 14     - FW Publish
- 15     - Install Policy
- 16 
- 17 - name: SSH Access to FW
- 18   check_point.mgmt.cp_mgmt_access_rule:
- 19     layer: "Network"
- 20     name: "SSH Access"
- 21     source: Any
- 22     destination:
- 23       - "{{ fw_name }}"
- 24     service: SSH
- 25     action: "Accept"
- 26     position: 2
- 27   notify:
- 28     - FW Publish
- 29     - Install Policy
+---
+fw_policy_base_position: 1
+fw_policy_mgmt_rules:
+  - name: "Ansible Management Access"
+    source:
+      - Ansible Server
+      - Windows SmartConsole
+      - Windows SmartConsole Public
+    destination:
+      - "{{ fw_name }}"
+    service: Any
+    action: "Accept"
+    position: "{{ fw_policy_base_position }}"
+
+  - name: "SSH Access"
+    source: Any
+    destination:
+      - "{{ fw_name }}"
+    service: SSH
+    action: "Accept"
+    position: "{{ fw_policy_base_position + 1 }}"
+
+fw_policy_dmz_rules:
+  - name: "Corp Web Server Access"
+    source: Any
+    destination:
+      - Corp Web Server
+    service:
+      - http
+      - https
+    action: "Accept"
+    position: "{{ fw_policy_base_position + 2 }}"
