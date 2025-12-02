@@ -1,11 +1,7 @@
-- check_point.mgmt.cp_mgmt_host:
+- name: Configure firewall management host objects
+  check_point.mgmt.cp_mgmt_host:
     name: "{{ item.name }}"
     ipv4_address: "{{ item.ipv4_address }}"
     color: red
   notify: FW Publish
   loop: "{{ mgmt_objects_fw_mgmt }}"
-
-
-  handlers:
-    - name: FW Publish
-      check_point.mgmt.cp_mgmt_publish:      

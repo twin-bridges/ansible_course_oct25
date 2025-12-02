@@ -15,7 +15,7 @@ mgmt_objects_ansible_server:
 mgmt_objects_smart_console:
   name: Windows SmartConsole
   ipv4_address: 172.31.12.101
-  
+
 mgmt_objects_smart_console_public:
   name: Windows SmartConsole Public
   ipv4_address: 3.71.9.240
@@ -24,3 +24,7 @@ mgmt_objects_fw_mgmt:
   - "{{ mgmt_objects_ansible_server }}"
   - "{{ mgmt_objects_smart_console }}"
   - "{{ mgmt_objects_smart_console_public }}"
+
+mgmt_objects_dmz_web_srv:
+  name: Corp Web Server
+  ipv4_address: 172.31.144.220
