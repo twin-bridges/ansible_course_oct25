@@ -1,0 +1,7 @@
+---
+- name: First playbook
+  hosts: local
+  tasks:
+    - name: Task1
+      ansible.builtin.debug:
+        msg: Hello world
