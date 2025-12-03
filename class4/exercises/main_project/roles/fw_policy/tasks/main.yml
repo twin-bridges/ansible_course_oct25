@@ -1,3 +1,5 @@
 ---
 - name: Firewall Management Rules
   ansible.builtin.import_tasks: fw_mgmt_policy.yml
+- name: DMZ Web Server
+  ansible.builtin.import_tasks: dmz_policy.yml
