@@ -1,0 +1,8 @@
+---
+- name: Exercise 2b
+  hosts: gaia
+  gather_facts: false
+  tasks:
+    - name: Print 'dns1' for gaia hosts
+      ansible.builtin.debug:
+        msg: "Primary DNS for host {{ inventory_hostname }} is {{ dns1 }}"

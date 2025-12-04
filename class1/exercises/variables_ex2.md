@@ -1,34 +1,76 @@
-1a. Create a Playbook containing a Play that executes on the "arista5" host. Ensure that "gather_facts" is set to True. Create a task that uses the "debug" module to print the "ansible_facts" to stdout. Create a subsequent task that prints just "ansible_facts.net_all_ipv4_addresses" to stdout.
+2a. Create a new directory that includes a Playbook and a "group_vars" directory. 
 
-Note: Ansible changed the behavior of network fact gathering reducing the amount of facts gathered by default. For all the parts of exercise1, you should add the following play-level arguments so that all of the needed network facts are gathered.
-gather_facts: True
-gather_subset: all
+The group_vars directory should contain a "gaia" subdirectory. Inside this "group_vars/gaia" subdirectory, create a file named "dns.yml". Inside this "dns.yml" file create a variable for "dns1" and assign it a value of "172.31.0.2". 
 
-1b. Add tasks to your Playbook to print out inventory information about arista5. This should include both the "ansible_network_os" and the "ansible_host" variables.
+Create a playbook that runs against the "gaia" group. Inside this playbook create a task using the "debug" module to print a message to stdout containing this "dns1" variable. The message should look similar to the following:
 
-1c. Create a directory called "group_vars" in the same directory as your Playbook. Within this directory, create a file named "all.yml". In this file, define a variable named "desired_eos_version" and set it to a value of "4.18.3". Add another task to your Playbook to print out the value of this "desired_eos_version" variable.
+```bash
+$ ansible-playbook exercise2a.yml 
 
-1d. In the same directory as your Playbook, create a YAML file called "my_vars.yml". Within this file, create the same variable named "desired_eos_version" as in the previous exercise, but with a different value. Load this variable from my_vars.yml by adding "vars_files: my_vars.yml" into your Playbook. Re-run the Playbook to see what happens. Which "desired_eos_version" wins? Why?
+PLAY [Exercise 2a] **********************************************************************
 
-1e. Add a task to your playbook to create a new variable using "set_fact". Name this variable "device_hostname" and set the value of it equal to the "inventory_hostname" combined with the suffix ".lab.io". In a final task, print the value of this variable.
-
-
-2a. Create a new directory that includes a Playbook and a "group_vars" directory. The group_vars directory should contain a "cisco" subdirectory. Inside this "group_vars/cisco" subdirectory, create a file named "bgp.yml". Inside this "bgp.yml" file create a variable for "bgp_asn" and assign it a value between 65000 and 65535. Use the "debug" module to print a message to stdout. The message should look similar to the following:
-TASK [Print BGP ASN for cisco hosts] **************************************************************************************************
-ok: [cisco1] => {
-    "msg": "The ASN for host cisco1 is 65001"
+TASK [Print 'dns1' for gaia hosts] ******************************************************
+[WARNING]: No inventory was parsed, only implicit localhost is available
+ok: [pod2-gaia] => {
+    "msg": "Primary DNS for host pod2-gaia is 172.31.0.2"
 }
-ok: [cisco5] => {
-    "msg": "The ASN for host cisco5 is 65001"
+ok: [pod1-gaia] => {
+    "msg": "Primary DNS for host pod1-gaia is 172.31.0.2"
 }
-ok: [cisco2] => {
-    "msg": "The ASN for host cisco2 is 65001"
+ok: [pod4-gaia] => {
+    "msg": "Primary DNS for host pod4-gaia is 172.31.0.2"
 }
-ok: [cisco6] => {
-    "msg": "The ASN for host cisco6 is 65001"
+ok: [pod3-gaia] => {
+    "msg": "Primary DNS for host pod3-gaia is 172.31.0.2"
+}
+ok: [pod5-gaia] => {
+    "msg": "Primary DNS for host pod5-gaia is 172.31.0.2"
 }
 
-2b. Create a "host_vars" directory, and a subdirectory named "cisco5" within it. Inside this, "host_vars/cisco5", create a file named "bgp.yml". Inside this file, create a variable named "bgp_asn" using a different ASN value. Re-run the Playbook. You should observe that the host_vars "bgp_asn" has higher priority than the group_vars "bgp_asn" variable.
+PLAY RECAP ******************************************************************************
+pod1-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod2-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod3-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod4-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod5-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+2b. Create a "host_vars" directory, and a subdirectory named "pod5-gaia" within it. Inside this, "host_vars/pod5-gaia" directore, create a file named "dns.yml". 
+
+Inside this file, create a variable named "dns1", but this time using a value of "8.8.8.8". 
+
+Re-run the Playbook. You should observe that the host_vars "dns1" has higher priority than the group_vars "dns1" variable.
+
+```bash
+$ ansible-playbook exercise2b.yml 
+
+PLAY [Exercise 2b] **********************************************************************
+
+TASK [Print 'dns1' for gaia hosts] ******************************************************
+[WARNING]: No inventory was parsed, only implicit localhost is available
+ok: [pod1-gaia] => {
+    "msg": "Primary DNS for host pod1-gaia is 172.31.0.2"
+}
+ok: [pod2-gaia] => {
+    "msg": "Primary DNS for host pod2-gaia is 172.31.0.2"
+}
+ok: [pod3-gaia] => {
+    "msg": "Primary DNS for host pod3-gaia is 172.31.0.2"
+}
+ok: [pod4-gaia] => {
+    "msg": "Primary DNS for host pod4-gaia is 172.31.0.2"
+}
+ok: [pod5-gaia] => {
+    "msg": "Primary DNS for host pod5-gaia is 8.8.8.8"      #### DIFFERENT DNS SERVER ####
+}
+
+PLAY RECAP ******************************************************************************
+pod1-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod2-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod3-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod4-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+pod5-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
 
 2c. Create the following subdirectories: cisco1, cisco2, cisco6 (inside the host_vars directory). The "host_vars/cisco5" subdirectory should already exist. Note, the directory names must exactly match the Ansible "inventory_hostname". In each of these ciscoX directories create a file named "ip_addresses.yml". Inside this file create a "loopback0" variable and assign this variable a unique IPv4 address (for example, 1.1.1.1 for cisco1).
 
