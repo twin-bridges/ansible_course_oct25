@@ -1,0 +1,8 @@
+---
+- name: Example host_vars and group_vars
+  hosts: cisco1:cisco2
+  gather_facts: false
+  tasks:
+    - name: Print out variables
+      ansible.builtin.debug:
+        msg: "{{ as_number }} --> {{ bgp_router_id }}"
