@@ -1,0 +1,12 @@
+---
+- name: Variables exercise 1a
+  hosts: pod3-gaia
+  gather_facts: false
+
+  tasks:
+    - name: Show active routes
+      check_point.gaia.cp_gaia_routes_facts:
+
+    - name: Print route facts
+      ansible.builtin.debug:
+        var: ansible_facts

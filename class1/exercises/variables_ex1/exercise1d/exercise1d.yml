@@ -1,0 +1,25 @@
+---
+- name: Variables exercise 1c
+  hosts: pod3-gaia
+  gather_facts: false
+  vars_files: my_vars.yml
+
+  tasks:
+    - name: Show active routes
+      check_point.gaia.cp_gaia_routes_facts:
+
+    - name: Print route facts
+      ansible.builtin.debug:
+        var: ansible_facts
+
+    - name: Print ansible_network_os
+      ansible.builtin.debug:
+        var: ansible_network_os
+
+    - name: Print ansible_host
+      ansible.builtin.debug:
+        var: ansible_host
+
+    - name: Print the external interface
+      ansible.builtin.debug:
+        var: external_intf
