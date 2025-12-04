@@ -1,0 +1,13 @@
+---
+- name: Print out variables
+  hosts: localhost
+  gather_facts: false
+  vars_prompt:
+    - name: bgp_asn
+      prompt: "Enter BGP AS Number"
+      private: false
+
+  tasks:
+    - name: Debug fact
+      ansible.builtin.debug:
+        msg: "{{ bgp_asn }}"
