@@ -1,3 +1,0 @@
----
-bgp_asn: 65535
-bgp_router_id: "{{ loopback0 }}"

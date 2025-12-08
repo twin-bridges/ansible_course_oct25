@@ -72,9 +72,15 @@ pod4-gaia                  : ok=1    changed=0    unreachable=0    failed=0    s
 pod5-gaia                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 
-2c. Create the following subdirectories: cisco1, cisco2, cisco6 (inside the host_vars directory). The "host_vars/cisco5" subdirectory should already exist. Note, the directory names must exactly match the Ansible "inventory_hostname". In each of these ciscoX directories create a file named "ip_addresses.yml". Inside this file create a "loopback0" variable and assign this variable a unique IPv4 address (for example, 1.1.1.1 for cisco1).
+2c. Create the following subdirectories: pod1-gaia, pod2-gaia, pod6-gaia (inside the host_vars directory). The "host_vars/pod5-gaia" subdirectory should already exist. 
 
-Inside the same ciscoX directory, create a second file named "bgp.yml". In this file create a variable "bgp_router_id" and assign it a value of the "loopback0" variable you just created (remember your  "{{ loopback0 }}" notation). The "cisco5" bgp.yml file should contain both the "bgp_asn" and the "bgp_router_id".
+Note, the directory names must exactly match the Ansible "inventory_hostname". 
+
+In each of these podX-gaia directories create a file named "ip_addresses.yml". Inside this file create a "eth1" variable and assign this variable a unique IPv4 address (for example, 1.1.1.1 for pod1-gaia).
+
+---- HERE -----
+
+Inside the same ciscoX directory, create a second file named "dns.yml". In this file create a variable "bgp_router_id" and assign it a value of the "loopback0" variable you just created (remember your  "{{ loopback0 }}" notation). The "cisco5" bgp.yml file should contain both the "bgp_asn" and the "bgp_router_id".
 
 Finally, modify your Playbook such that your output looks similar to the following.
 TASK [Print BGP ASN for cisco hosts] **************************************************************************************************
