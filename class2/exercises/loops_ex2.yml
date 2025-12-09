@@ -1,0 +1,23 @@
+---
+- name: Retrieve interface info
+  hosts: mgmt
+  gather_facts: false
+  tasks:
+    - name: gateway facts
+      check_point.mgmt.cp_mgmt_simple_gateway_facts:
+        name: "{{ fw_name }}"
+      register: output
+
+    - ansible.builtin.set_fact:
+        intf_list: "{{ output.ansible_facts.simple_gateway.interfaces }}"
+
+    - ansible.builtin.debug:
+        var: intf_list
+
+    - ansible.builtin.debug:
+        msg: |
+          {{ item.name }} {{ item['ipv4-address'] }}/{{ item['ipv4-network-mask'] }}
+      when: item.name == 'eth0'
+      loop: "{{ intf_list }}"
+      loop_control:
+        label: " "

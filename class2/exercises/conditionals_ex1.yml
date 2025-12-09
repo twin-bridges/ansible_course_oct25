@@ -1,0 +1,46 @@
+---
+- name: Retrieve interface info
+  hosts: mgmt
+  gather_facts: false
+  vars:
+    test1: something
+  tasks:
+
+    - name: Conditional hard-coded to true
+      ansible.builtin.debug:
+        msg: hello1
+      when: true
+
+    - name: Conditional hard-coded to false
+      ansible.builtin.debug:
+        msg: hello2
+      when: false
+
+    - name: Conditional test of variable
+      ansible.builtin.debug:
+        msg: hello3
+      when: test1 == 'something'
+
+    - name: Gather gateway facts
+      check_point.mgmt.cp_mgmt_simple_gateway_facts:
+        name: "{{ fw_name }}"
+      register: output
+
+    - name: Simplify gateway facts
+      ansible.builtin.set_fact:
+        gw_facts: "{{ output.ansible_facts.simple_gateway }}"
+
+    - name: Ensure gw_facts is defined
+      ansible.builtin.debug:
+        msg: gw_facts exist
+      when: gw_facts is defined
+
+    - name: Check if a log-server
+      ansible.builtin.debug:
+        msg: Log Server
+      when: gw_facts["log-server"]
+
+    - name: Check IPS
+      ansible.builtin.debug:
+        msg: IPS
+      when: gw_facts["ips"]

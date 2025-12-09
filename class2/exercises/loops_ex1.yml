@@ -1,28 +1,53 @@
-# Use cp_mgmt_simple_gateway_facts to retrieve facts about the firewall.
-# Extract the '.ansible_facts.simple_gateway.interfaces' which will be 
-# a list of interfaces.
-# Loop over this list of interfaces and for only 'eth0' print out the
-# name, ipv4-address and ipv4-network-mask
 ---
 - name: Retrieve interface info
   hosts: mgmt
   gather_facts: false
+  vars:
+    my_firewalls:
+      - fw1
+      - fw2
+      - fw3
+      - fw4
+    firewall_dict:
+      name: fw1
+      location: Munich
+      ip_address: 1.1.1.1
+      sw_version: R82
+    fw_list:
+      - {name: fw1, location: Munich, ip_address: 1.1.1.1, sw_version: R82 }
+      - {name: fw2, location: Munich, ip_address: 1.1.1.2, sw_version: R82 }
+      - {name: fw3, location: Cologne, ip_address: 10.1.1.1, sw_version: R81.10 }
+      - {name: fw4, location: Cologne, ip_address: 10.1.1.2, sw_version: R81.10 }
   tasks:
-    - name: gateway facts
-      check_point.mgmt.cp_mgmt_simple_gateway_facts:
-        name: "{{ fw_name }}"
-      register: output
 
-    - ansible.builtin.set_fact:
-        intf_list: "{{ output.ansible_facts.simple_gateway.interfaces }}"
+    - name: Simple loop
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop:
+        - fw1
+        - fw2
+        - fw3
+        - fw4
 
-    - ansible.builtin.debug:
-        var: intf_list
+    - name: Simple loop2
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop: "{{ my_firewalls }}"
 
-    - ansible.builtin.debug:
+    - name: Simple loop over dictionary
+      ansible.builtin.debug:
+        msg: "{{ item.key }} --> {{ item.value }}"
+      loop: "{{ firewall_dict | dict2items }}"
+      loop_control:
+        label: " "
+
+    - name: Loop over list of dictionaries
+      ansible.builtin.debug:
         msg: |
-          {{ item.name }} {{ item['ipv4-address'] }}/{{ item['ipv4-network-mask'] }}
-      when: item.name == 'eth0'
-      loop: "{{ intf_list }}"
+          Name: {{ item.name }}
+          Location: {{ item.location }} 
+          IP Address: {{ item.ip_address }} 
+          SW Version: {{ item.sw_version }} 
+      loop: "{{ fw_list }}"
       loop_control:
         label: " "
