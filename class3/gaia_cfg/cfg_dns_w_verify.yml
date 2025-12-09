@@ -1,0 +1,44 @@
+---
+- name: Config DNS servers with verification
+  hosts: gaia
+  gather_facts: false
+
+  vars:
+    dns1: "172.31.0.2"
+    dns2: "8.8.8.8"
+    dns3: "8.8.4.4"
+    dns_domain: lasthop.io
+    # dns_domain: checkpoint.com
+
+  tasks:
+    - name: Config DNS servers
+      check_point.gaia.cp_gaia_dns:
+        suffix: "{{ dns_domain }}"
+        primary: "{{ dns1 }}"
+        secondary: "{{ dns2 }}"
+        tertiary: "{{ dns3 }}"
+
+    - name: "Configure domainname (not idempotent)"
+      check_point.gaia.cp_gaia_run_script:
+        script: clish -c "set domainname {{ dns_domain }}"
+      notify: Gaia Save Config
+
+    - name: Get Gaia DNS
+      check_point.gaia.cp_gaia_dns_facts:
+      register: result
+
+    - ansible.builtin.set_fact:
+        dns_cfg: "{{ result.ansible_facts }}"
+
+    - name: Verify DNS Configuration
+      ansible.builtin.assert:
+        that:
+          - dns_cfg.primary == dns1
+          - dns_cfg.secondary == dns2
+          - dns_cfg.tertiary == dns3
+          - dns_cfg.suffix == dns_domain
+
+  handlers:
+    - name: Gaia Save Config
+      check_point.gaia.cp_gaia_run_script:
+        script: clish -c "save config"

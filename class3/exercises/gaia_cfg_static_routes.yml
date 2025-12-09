@@ -1,8 +1,4 @@
 ---
-# Use 'cp_gaia_static_route' to configure a new static route of 172.31.128.0/21
-# with a next_hop of 172.31.128.1 using interface eth1.
-# Use 'cp_gaia_routes_facts' to verify the routing table after configuration.
-# Extract the new route and use assert/that conditions to verify the route is correct.
 - name: Add static routes
   hosts: gaia
   gather_facts: false
