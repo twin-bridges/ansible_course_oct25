@@ -13,9 +13,10 @@
     - name: Execute command
       check_point.mgmt.cp_mgmt_run_script:
         script: "{{ command }}"
-        script_name: 'List files'
+        script_name: 'Execute Script'
         targets:
           - "{{ fw_name }}"
+      changed_when: false
       register: response
 
     - name: Extract 'run-script' field
