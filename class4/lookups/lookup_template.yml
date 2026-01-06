@@ -1,0 +1,10 @@
+---
+- name: Load and process banner.j2 using a lookup
+  hosts: mgmt
+  gather_facts: false
+  vars:
+    site_location: Köln
+  tasks:
+    - name: Use a template lookup
+      ansible.builtin.debug:
+        msg: "{{ lookup('template', 'banner.j2') }}"

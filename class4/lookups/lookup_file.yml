@@ -1,0 +1,8 @@
+---
+- name: Load banner.txt using a lookup
+  hosts: local
+  gather_facts: false
+  tasks:
+    - name: Use a file lookup
+      ansible.builtin.debug:
+        msg: "{{ lookup('file', 'banner.txt') }}"

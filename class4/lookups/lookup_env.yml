@@ -1,0 +1,16 @@
+---
+- name: Load and process banner.j2 using a lookup and env variable
+  hosts: mgmt
+  gather_facts: false
+  vars:
+    # default > true is required as 'default' only operates on undefined variables not null-string
+    # so make a more Python true/false determination.
+    site_location: "{{ lookup('env', 'SITE_LOCATION') | default('Frankfurt/M', true) }}"
+  tasks:
+    - name: Use a template lookup
+      ansible.builtin.debug:
+        var: site_location
+
+    - name: Use a template lookup
+      ansible.builtin.debug:
+        msg: "{{ lookup('template', 'banner.j2') }}"
