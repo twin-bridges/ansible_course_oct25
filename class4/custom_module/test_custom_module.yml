@@ -1,0 +1,12 @@
+---
+- name: Test custom Ansible module
+  hosts: mgmt
+  gather_facts: false
+  tasks:
+    - name: Testing the module
+      my_module:
+        host: "{{ ansible_host }}"
+        api_user: "{{ ansible_user }}"
+        api_password: "{{ ansible_user }}"
+      register: output
+
