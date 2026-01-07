@@ -11,6 +11,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class CheckpointMgmtAuthError(Exception):
     pass
 
+
 class CheckpointMgmtApiError(Exception):
     pass
 
@@ -77,15 +78,31 @@ def run_module():
     password = module.params["api_password"]
 
     try:
-        response = chkpnt_login(base_url=base_url, user=user, password=password)
+        login_response = chkpnt_login(base_url=base_url, user=user, password=password)
     except CheckpointMgmtAuthError as e:
         module.fail_json(msg="CheckPoint Authentication Failure", error_details=str(e))
     except CheckpointMgmtApiError as e:
-        module.fail_json(msg="A CheckPoint API failure occurred during login", error_details=str(e))
+        module.fail_json(
+            msg="A CheckPoint API failure occurred during login", error_details=str(e)
+        )
+
+    session_id = login_response.json()["sid"]
+
+    #### Test API endpoint (could make a module argument)
+    endpoint = "show-networks"
+
+    # 'limit' and 'offset' are used for pagination
+    show_hosts_payload = {"offset": 0, "limit": 50, "details-level": "full"}
+    response = chkpnt_api(
+        base_url=base_url,
+        endpoint=endpoint,
+        payload=show_hosts_payload,
+        session_id=session_id,
+    )
 
     results = {
         "changed": False,  # mandatory
-        "failed": False,   # optional
+        "failed": False,  # optional
         "msg": response.json(),
     }
     module.exit_json(**results)
@@ -93,21 +110,34 @@ def run_module():
 
 def run_python():
     mgmt_host = "chkpnt-pod1.lasthop.io"
-    user = "admin1"
+    user = "admin"
     password = "INVALID"
 
     base_url = f"https://{mgmt_host}/web_api"
 
-    response = chkpnt_login(base_url=base_url, user=user, password=password)
-    import pdb
+    login_response = chkpnt_login(base_url=base_url, user=user, password=password)
+    session_id = login_response.json()["sid"]
 
-    pdb.set_trace()
-    print(response)
+    # import pdb; pdb.set_trace()
+
+    #### Test API endpoint (could make a module argument)
+    endpoint = "show-networks"
+
+    # 'limit' and 'offset' are used for pagination
+    show_hosts_payload = {"offset": 0, "limit": 50, "details-level": "full"}
+    response = chkpnt_api(
+        base_url=base_url,
+        endpoint=endpoint,
+        payload=show_hosts_payload,
+        session_id=session_id,
+    )
+
+    print(response.json())
 
 
 def main():
-    run_module()
-    # run_python()
+    # run_module()
+    run_python()
 
 
 if __name__ == "__main__":
