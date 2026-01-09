@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Use newer import_role form
+      ansible.builtin.import_role:
+        name: core_router
+      # when: true
+      # tags: foo1
