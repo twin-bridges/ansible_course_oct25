@@ -77,7 +77,7 @@ $ ansible-inventory --host lab_gaia -i ./inventory_ex1c.ini
 ```json
 {
     "ansible_network_os": "check_point.gaia.checkpoint",
-    "ansible_password": "bogus",
+    "ansible_password": "invalid",
     "ansible_python_interpreter": "/home/studentX/VENV/py3_venv/bin/python",
     "ansible_user": "admin"
 }
