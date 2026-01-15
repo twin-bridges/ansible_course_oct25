@@ -1,6 +1,6 @@
 ---
 - name: Config DNS servers
-  hosts: gaia
+  hosts: pod99-gaia
   gather_facts: false
 
   vars:
