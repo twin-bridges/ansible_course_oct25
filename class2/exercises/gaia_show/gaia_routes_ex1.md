@@ -1,11 +1,8 @@
 
-Use the 'check_point.gaia.cp_gaia_routes_facts' module to retrieve the Gaia routing table.
-
-Use the 'debug' and 'set_fact' modules to extract the routes from the routing table.
-
-Use 'set_fact' to retrieve the default route and its corresponding 'gateways' information.
-
-Use 'debug' to print the prefix and next_hop out. Your output should look similar to the following:
+Create an Ansible playbook that connects to the Gaia host of your pod. In this playbook do the following:
+1. Use the 'check_point.gaia.cp_gaia_routes_facts' module to retrieve the Gaia routing table.
+2. Iteratively use the 'ansible.builtin.debug' and 'ansible.builtin.set_fact' modules to display and extract certain information from the returned routing table (namely extract the default route and the corresponding 'gateways' information).
+3. Use a final 'ansible.builtin.debug' task to print the default route and the next_hop out (the next_hop is the 'gateways' information]. Your output should look similar to the following:
 
 ```bash
 ansible-playbook gaia_routes_ex1.yml

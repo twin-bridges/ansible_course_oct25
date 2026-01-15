@@ -1,6 +1,6 @@
 ---
 - name: Inspect Routes
-  hosts: gaia
+  hosts: pod99-gaia
   gather_facts: false
   tasks:
     - name: Inspect Routes
