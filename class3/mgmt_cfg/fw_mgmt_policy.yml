@@ -1,6 +1,6 @@
 ---
 - name: Deploy firewall management policy
-  hosts: mgmt
+  hosts: pod99-mgmt
   gather_facts: false
   vars:
     fw_policy_mgmt_rules:
