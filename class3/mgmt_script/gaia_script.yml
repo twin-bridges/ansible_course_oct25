@@ -1,0 +1,20 @@
+---
+- name: Test mgmt script
+  hosts: pod99-gaia
+  gather_facts: false
+  vars:
+    command: 'ls -l /'
+    # command: fw stat
+    # command: clish -c "show interfaces"
+  tasks:
+
+    - name: Execute command
+      check_point.gaia.cp_gaia_run_script:
+        script: "{{ command }}"
+      changed_when: false
+      register: response
+
+    - name: Display response
+      ansible.builtin.debug:
+        msg: "{{ response.run_script.tasks[0]['task-details'][0].output | b64decode }}"
+

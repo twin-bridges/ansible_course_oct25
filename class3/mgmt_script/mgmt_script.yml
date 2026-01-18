@@ -1,6 +1,6 @@
 ---
 - name: Test mgmt script
-  hosts: mgmt
+  hosts: pod99-mgmt
   gather_facts: false
   vars:
     # command: 'ls -l /'
