@@ -3,11 +3,11 @@
   hosts: pod99-mgmt
   gather_facts: false
   vars:
-    # command: 'ls -l /'
+    command: 'ls -l /'
     # command: fw stat
     # command: cphaprob state
     # command: cpstat os -f memory
-    command: clish -c "show interfaces"
+    # command: clish -c "show interfaces"
   tasks:
 
     - name: Execute command
