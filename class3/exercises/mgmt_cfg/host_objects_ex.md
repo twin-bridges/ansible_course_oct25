@@ -1,6 +1,6 @@
-### Exercise mgmt_cfg objects
+### Add host objects exercise
 
-Create a playbook that executes against your Pod in the lab. The playbook should configure the following host objects:
+Create a playbook that executes against your Pod in the lab. The playbook should configure the following host objects (use module 'check_point.mgmt.cp_mgmt_host'):
 
         name: DMZ DB1
         ipv4_address: 172.31.144.241
