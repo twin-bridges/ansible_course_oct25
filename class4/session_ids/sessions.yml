@@ -1,0 +1,33 @@
+- name: Show Sessions
+  hosts: pod99-mgmt
+  gather_facts: false
+  tasks:
+    - name: Get all sessions
+      check_point.mgmt.cp_mgmt_session_facts:
+        details_level: full
+      register: session_list
+
+    - name: Extract sessions
+      ansible.builtin.set_fact:
+        sessions: "{{ session_list.ansible_facts.sessions.objects }}"
+
+    - name: Show sessions
+      ansible.builtin.debug:
+        msg: "{{ sessions }}"
+
+    - ansible.builtin.set_fact:
+        uids: "{{ sessions | map(attribute='uid') | list }}"
+        locks: "{{ sessions | map(attribute='locks') | list }}"
+
+    - ansible.builtin.debug:
+        var: uids
+
+    - ansible.builtin.debug:
+        var: locks
+
+    - name: Combine lists together
+      ansible.builtin.set_fact:
+        session_locks: "{{ uids | zip(locks) | list }}"
+
+    - ansible.builtin.debug:
+        var: session_locks
