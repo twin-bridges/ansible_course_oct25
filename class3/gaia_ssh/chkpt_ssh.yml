@@ -1,0 +1,15 @@
+# Had to set 'admin' shell to directly be 'bash'
+# Used key authentication for the SSH authentication
+- name: Testing direct SSH and use of command/shell
+  hosts: gaia
+  gather_facts: false
+  tasks:
+    - name: Execute simple command
+      # ansible.builtin.command: ls -al
+      ansible.builtin.shell: ls -al
+      changed_when: false
+      register: output
+
+    - name: Display output
+      ansible.builtin.debug:
+        var: output
