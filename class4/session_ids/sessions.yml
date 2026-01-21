@@ -5,11 +5,11 @@
     - name: Get all sessions
       check_point.mgmt.cp_mgmt_session_facts:
         details_level: full
-      register: session_list
+      register: session_out
 
     - name: Extract sessions
       ansible.builtin.set_fact:
-        sessions: "{{ session_list.ansible_facts.sessions.objects }}"
+        sessions: "{{ session_out.ansible_facts.sessions.objects }}"
 
     - name: Show sessions
       ansible.builtin.debug:
