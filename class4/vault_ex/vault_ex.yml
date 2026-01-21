@@ -3,6 +3,7 @@
 # ansible-vault edit group_vars/all.yml
 # ansible-vault decrypt group_vars/all.yml
 #  --ask-vault-pass
+#  Also setting in .ansible.cfg
 - name: Basic Gaia Playbook
   hosts: gaia
   gather_facts: false
