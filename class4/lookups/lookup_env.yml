@@ -3,8 +3,8 @@
   hosts: mgmt
   gather_facts: false
   vars:
-    # default > true is required as 'default' only operates on undefined variables not null-string
-    # so make a more Python true/false determination.
+    # default > true is required as 'default' only operates on undefined 
+    # variables not null-string so make a Python true/false determination.
     site_location: "{{ lookup('env', 'SITE_LOCATION') | default('Frankfurt/M', true) }}"
   tasks:
     - name: Use a template lookup
