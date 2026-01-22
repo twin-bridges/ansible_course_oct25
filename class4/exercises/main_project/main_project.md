@@ -57,7 +57,7 @@ Note, in order to make the 'clish -c "set domainname lasthop.io"' task idempoten
 2. Add logic to your 'cp_gaia_run_script / set domainname' task whereby the script execution only happens if the domainname of 'lasthop.io' has not been configured.
 
 ### Bonus / Optional
-Create a separate role named 'script_b64_decode' that takes the output of the 'cp_mgmt_run_script' module execution and parses this output and returns the decoded responseMessage.
+Create a separate role named 'script_b64_decode' that takes the output of the 'cp_mgmt_run_script' module execution, parses this output, and returns the decoded responseMessage.
 
 Execution of this role should look similar to the following:
 
@@ -69,10 +69,12 @@ Execution of this role should look similar to the following:
     # Pass the required variable into the role
     script_b64_decode_input: "{{ response }}"
 
-    - name: Display the decode responseMessage
-      ansible.builtin.debug:
-        var: script_b64_decode_rm
+- name: Display the decode responseMessage
+  ansible.builtin.debug:
+    var: script_b64_decode_rm
 ```
 
-The above 'response' variable is the reponse from a 'cp_mgmt_run_script' execution. The 'script_b64_decode_rm' is set in the role and is the decoded responseMessage.
+The above '{{ response }}' variable is the response from a 'cp_mgmt_run_script' execution. 
+
+The 'script_b64_decode_rm' variable is set in the role and is the decoded responseMessage.
 
