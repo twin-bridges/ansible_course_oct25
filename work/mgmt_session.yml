@@ -1,0 +1,32 @@
+---
+- name: Find existing mgmt sessions
+  hosts: pod99-mgmt
+  gather_facts: false
+
+  tasks:
+    - name: Display show-session
+      check_point.mgmt.cp_mgmt_session_facts:
+        details_level: full
+      register: sessions
+
+    - name: Extract list of sessions
+      ansible.builtin.set_fact:
+        session_list: "{{ sessions.ansible_facts.sessions.objects }}"
+
+    - ansible.builtin.set_fact:
+        uids: "{{ session_list | map(attribute='uid') | list }}"
+        locks: "{{ session_list | map(attribute='locks') | list }}"
+
+    - ansible.builtin.set_fact:
+        session_locks: "{{ uids | zip(locks) | list }}"
+
+    - ansible.builtin.debug:
+        var: session_locks
+
+    - ansible.builtin.set_fact:
+        session_id_clear: "{{ item[0] }}"
+      loop: "{{ session_locks }}"
+      when: item[1] == 8
+
+    - ansible.builtin.debug:
+        var: session_id_clear

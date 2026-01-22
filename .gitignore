@@ -208,3 +208,5 @@ __marimo__/
 
 *.swp
 class4/custom_module/test_args.json
+
+.ansible/

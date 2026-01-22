@@ -1,0 +1,42 @@
+---
+- name: Find existing mgmt sessions
+  hosts: pod99-mgmt
+  gather_facts: false
+
+  tasks:
+    - name: Display show-session
+      check_point.mgmt.cp_mgmt_session_facts:
+        details_level: full
+      register: sessions
+
+    - name: Extract list of sessions
+      ansible.builtin.set_fact:
+        session_list: "{{ sessions.ansible_facts.sessions.objects }}"
+
+    - name: Extract uid and locks
+      ansible.builtin.set_fact:
+        uids: "{{ session_list | map(attribute='uid') | list }}"
+        locks: "{{ session_list | map(attribute='locks') | list }}"
+
+    - name: Display uids and lock
+      ansible.builtin.debug:
+        msg: "{{ item }} --> {{ locks[idx] }}"
+      loop: "{{ uids }}"
+      loop_control:
+        index_var: idx
+
+    - name: Initialize to blank list
+      ansible.builtin.set_fact:
+        session_locks: []
+
+    - name: Create new data structure
+      ansible.builtin.set_fact:
+        session_locks: "{{ session_locks + [{'uid': item, 'lock': locks[idx]}] }}"
+      loop: "{{ uids }}"
+      loop_control:
+        index_var: idx
+
+    - name: Display data structure
+      ansible.builtin.debug:
+        var: session_locks
+
