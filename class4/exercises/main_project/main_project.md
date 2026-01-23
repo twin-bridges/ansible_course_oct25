@@ -61,6 +61,14 @@ Note, in order to make the 'clish -c "set domainname lasthop.io"' task idempoten
 1. First retrieve the current configuration.
 2. Add logic to your 'cp_gaia_run_script / set domainname' task whereby the script execution only happens if the domainname of 'lasthop.io' has not been configured.
 
+### Tags
+
+Use tags so that the Gaia config, network and host objects, and firewall policy can be configured independently.
+
+### Vault
+
+Use vault to encrypt your 'ansible_username' and 'ansible_password' inside either 'group_vars/all.yml' or inside a role variable 'defaults/main.yml'. The location you use will depend on whether you use import_role or include_role.
+
 ### Bonus / Optional
 Create a separate role named 'script_b64_decode' that takes the output of the 'cp_mgmt_run_script' module execution, parses this output, and returns the decoded responseMessage.
 
