@@ -1,0 +1,4 @@
+---
+collections:
+  - name: check_point.gaia
+    version: 7.0.0
