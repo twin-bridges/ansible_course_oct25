@@ -3,12 +3,6 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: List Ansible Collection Paths
-      ansible.builtin.debug:
-        msg: 
-          - "Collection Paths: {{ ansible_collections_paths }}"
-          - "Current Library Path: {{ lookup('env', 'ANSIBLE_COLLECTIONS_PATH') }}"
-
     - name: Try to find the Gaia collection on disk
       ansible.builtin.shell: "ansible-galaxy collection list"
       register: collection_list
