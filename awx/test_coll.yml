@@ -20,9 +20,9 @@
         msg: |
           {{ ansible_host }}
 
-    - name: Show Version
-      check_point.gaia.cp_gaia_version_facts:
-      register: result
-
-    - ansible.builtin.debug:
-        var: result
+#    - name: Show Version
+#      check_point.gaia.cp_gaia_version_facts:
+#      register: result
+#
+#    - ansible.builtin.debug:
+#        var: result
