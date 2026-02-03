@@ -4,14 +4,12 @@
   gather_facts: no
   tasks:
     - name: Ensure /etc/ansible exists
-      become: yes
       ansible.builtin.file:
         path: /etc/ansible
         state: directory
         mode: '0755'
 
     - name: Create the empty hosts file
-      become: yes
       ansible.builtin.file:
         path: /etc/ansible/hosts
         state: touch
