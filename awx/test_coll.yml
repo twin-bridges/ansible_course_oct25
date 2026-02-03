@@ -22,6 +22,8 @@
 
     - name: Show Version
       check_point.gaia.cp_gaia_version_facts:
+        version: null
+        virtual_system_id: null
       register: result
 
     - ansible.builtin.debug:
